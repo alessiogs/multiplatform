@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -24,6 +25,14 @@ export class AuthService {
 
   login(user: User) {
     return this.generateTokens(user);
+  }
+
+  register(user: CreateUserDto) {
+    // save user to db
+  }
+
+  refreshSession(user: { id: string; email: string }) {
+    return this.generateTokens(user as User);
   }
 
   private generateTokens(user: User) {
