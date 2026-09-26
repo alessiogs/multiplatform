@@ -1,10 +1,11 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
 import { UserRole } from './user-role.enum';
 import { RefreshToken } from './refresh-token';
 
 @Entity()
 export class User {
-  @Column()
+  @PrimaryColumn()
+  @Generated('uuid')
   id: string;
 
   @Column()

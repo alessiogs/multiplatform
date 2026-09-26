@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Cookies,
   Post,
   Req,
   Request,
@@ -28,9 +29,8 @@ export class AuthController {
     return this.authService.register(user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('refresh')
-  refreshSession(@Req() user: { id: string; email: string }) {
-    return this.authService.refreshSession(user);
+  refreshSession(@Cookies('refreshToken') refreshToken: string) {
+    return this.authService.refreshSession(refreshToken);
   }
 }

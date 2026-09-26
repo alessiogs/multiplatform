@@ -3,12 +3,18 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { RefreshToken } from '../users/entities/refresh-token';
+import { JwtTokenPayload } from './interfaces/jwt-token-payload';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    @InjectRepository(User)
+    private refreshTokensRepository: Repository<RefreshToken>,
   ) {}
 
   async validateUser(
@@ -23,24 +29,74 @@ export class AuthService {
     return null;
   }
 
-  login(user: User) {
-    return this.generateTokens(user);
+  async login(user: User) {
+    const { accessToken, accessTokenExp, refreshToken, refreshTokenExp } =
+      this.generateTokens(user);
+
+    await this.refreshTokensRepository.save({
+      token: refreshToken,
+      user,
+    });
+
+    return { accessToken, accessTokenExp, refreshToken, refreshTokenExp };
   }
 
-  register(user: CreateUserDto) {
-    // save user to db
+  async register(dto: CreateUserDto) {
+    const user = await this.usersService.create(dto);
+
+    return user;
   }
 
-  refreshSession(user: { id: string; email: string }) {
-    return this.generateTokens(user as User);
+  async refreshSession(refreshToken: string) {
+    try {
+      await this.jwtService.verifyAsync(refreshToken);
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const storedToken = await this.refreshTokensRepository.findOne({
+      where: {
+        token: refreshToken,
+      },
+      relations: {
+        user: true,
+      },
+    });
+
+    if (!storedToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const {
+      accessToken,
+      accessTokenExp,
+      refreshToken: newRefreshToken,
+      refreshTokenExp,
+    } = this.generateTokens(storedToken.user);
+
+    await this.refreshTokensRepository.remove(storedToken);
+
+    await this.refreshTokensRepository.save({
+      token: newRefreshToken,
+      user: storedToken.user,
+    });
+
+    return {
+      accessToken,
+      accessTokenExp,
+      refreshToken: newRefreshToken,
+      refreshTokenExp,
+    };
   }
 
   private generateTokens(user: User) {
     const payload = { email: user.email, sub: user.id };
 
     const accessToken = this.jwtService.sign(payload);
+    const { exp: accessTokenExp } = this.jwtService.decode(accessToken);
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
+    const { exp: refreshTokenExp } = this.jwtService.decode(refreshToken);
 
-    return { accessToken, refreshToken };
+    return { accessToken, accessTokenExp, refreshToken, refreshTokenExp };
   }
 }
