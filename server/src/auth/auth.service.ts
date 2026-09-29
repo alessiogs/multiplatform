@@ -1,19 +1,18 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../users/users.service';
-import { User } from '../users/entities/user.entity';
-import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RefreshToken } from '../users/entities/refresh-token';
-import { JwtTokenPayload } from './interfaces/jwt-token-payload';
+import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
-    @InjectRepository(User)
+    @InjectRepository(RefreshToken)
     private refreshTokensRepository: Repository<RefreshToken>,
   ) {}
 
@@ -21,7 +20,7 @@ export class AuthService {
     email: string,
     password: string,
   ): Promise<Omit<User, 'password'> | null> {
-    const user = await this.usersService.findOne(email);
+    const user = await this.usersService.findByEmailForAuth(email);
     if (user && user.password === password) {
       const { password: _, ...result } = user;
       return result;

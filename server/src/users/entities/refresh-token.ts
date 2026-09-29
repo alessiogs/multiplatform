@@ -1,4 +1,11 @@
-import { Column, Entity, Generated, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Generated,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { User } from './user.entity';
 
 @Entity()
@@ -10,6 +17,9 @@ export class RefreshToken {
   @Column()
   token: string;
 
-  @ManyToOne(() => User, (user) => user.refreshTokens)
+  @ManyToOne(() => User, (user) => user.refreshTokens, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'user_id' })
   user: User;
 }

@@ -1,20 +1,25 @@
-import { Column, Entity, Generated, OneToMany, PrimaryColumn } from 'typeorm';
-import { UserRole } from './user-role.enum';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { RefreshToken } from './refresh-token';
+import { UserRole } from './user-role.enum';
 
 @Entity()
 export class User {
-  @PrimaryColumn()
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column({ select: false })
   password: string;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column({ nullable: true })

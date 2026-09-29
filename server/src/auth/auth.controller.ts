@@ -6,6 +6,7 @@ import {
   Req,
   Request,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
@@ -25,8 +26,8 @@ export class AuthController {
   }
 
   @Post('register')
-  register(@Body() user: CreateUserDto) {
-    return this.authService.register(user);
+  register(@Body(ValidationPipe) dto: CreateUserDto) {
+    return this.authService.register(dto);
   }
 
   @Post('refresh')
