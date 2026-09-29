@@ -1,26 +1,33 @@
+@import "@multiplatform/tokens/tokens.css";
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-background: var(--token-color-background);
+  --color-foreground: var(--token-color-text);
+  --color-surface: var(--token-color-surface);
+  --color-muted: var(--token-color-text-secondary);
+  --color-border: var(--token-color-border);
+  --color-primary: var(--token-color-primary);
+  --font-sans: var(--token-font-family-sans);
+  --font-mono: var(--token-font-family-mono);
+  --spacing: var(--token-space-one);
+  --text-xs: var(--token-font-size-code);
+  --text-sm: var(--token-font-size-small);
+  --text-base: var(--token-font-size-body);
+  --text-xl: var(--token-font-size-heading-small);
+  --text-2xl: var(--token-font-size-heading);
+  --text-3xl: var(--token-font-size-subtitle);
+  --radius-xxs: var(--token-radius-xxs);
+  --radius-xs: var(--token-radius-xs);
+  --radius-sm: var(--token-radius-sm);
+  --radius-md: var(--token-radius-md);
+  --radius-lg: var(--token-radius-lg);
+  --shadow-sm: var(--token-shadow-sm);
+  --shadow-md: var(--token-shadow-md);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--token-color-background);
+  color: var(--token-color-text);
+  font-family: var(--token-font-family-sans);
 }

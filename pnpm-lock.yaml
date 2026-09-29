@@ -92,6 +92,9 @@ importers:
 
   apps/next:
     dependencies:
+      '@multiplatform/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
       next:
         specifier: 16.3.7
         version: 16.3.7(@types/node@20.19.43)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
@@ -129,6 +132,9 @@ importers:
 
   apps/spa:
     dependencies:
+      '@multiplatform/tokens':
+        specifier: workspace:*
+        version: link:../../packages/tokens
       react:
         specifier: ^19.2.8
         version: 19.2.8

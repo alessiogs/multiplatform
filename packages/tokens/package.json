@@ -7,6 +7,10 @@
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
-    }
+    },
+    "./tokens.css": "./generated/tokens.css"
+  },
+  "scripts": {
+    "generate:css": "node ./scripts/generate-css.mjs"
   }
 }
