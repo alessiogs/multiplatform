@@ -1,6 +1,8 @@
 import { Platform, StyleSheet, Text, type TextProps } from 'react-native';
 
-import { Fonts, ThemeColor } from '@/constants/theme';
+import { colors, typography } from '@multiplatform/tokens';
+import { Fonts } from '@/constants/theme';
+import type { ThemeColor } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export type ThemedTextProps = TextProps & {
@@ -32,42 +34,42 @@ export function ThemedText({ style, type = 'default', themeColor, ...rest }: The
 
 const styles = StyleSheet.create({
   small: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: typography.size.small,
+    lineHeight: typography.lineHeight.small,
     fontWeight: 500,
   },
   smallBold: {
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: typography.size.small,
+    lineHeight: typography.lineHeight.small,
     fontWeight: 700,
   },
   default: {
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: typography.size.body,
+    lineHeight: typography.lineHeight.body,
     fontWeight: 500,
   },
   title: {
-    fontSize: 48,
+    fontSize: typography.size.title,
     fontWeight: 600,
-    lineHeight: 52,
+    lineHeight: typography.lineHeight.title,
   },
   subtitle: {
-    fontSize: 32,
-    lineHeight: 44,
+    fontSize: typography.size.subtitle,
+    lineHeight: typography.lineHeight.subtitle,
     fontWeight: 600,
   },
   link: {
-    lineHeight: 30,
-    fontSize: 14,
+    lineHeight: typography.lineHeight.link,
+    fontSize: typography.size.small,
   },
   linkPrimary: {
-    lineHeight: 30,
-    fontSize: 14,
-    color: '#3c87f7',
+    lineHeight: typography.lineHeight.link,
+    fontSize: typography.size.small,
+    color: colors.light.primary,
   },
   code: {
     fontFamily: Fonts.mono,
     fontWeight: Platform.select({ android: 700 }) ?? 500,
-    fontSize: 12,
+    fontSize: typography.size.code,
   },
 });
