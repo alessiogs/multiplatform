@@ -33,6 +33,8 @@ export class AuthService {
     const { accessToken, accessTokenExp, refreshToken, refreshTokenExp } =
       this.generateTokens(user);
 
+    await this.refreshTokensRepository.delete({ user: { id: user.id } });
+
     await this.refreshTokensRepository.save({
       token: await bcrypt.hash(refreshToken, 12),
       user,
@@ -58,19 +60,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid refresh token');
     }
 
-    const storedTokens = await this.refreshTokensRepository.find({
-      relations: {
-        user: true,
-      },
-    });
-    let storedToken: RefreshToken | undefined;
-
-    for (const candidate of storedTokens) {
-      if (await bcrypt.compare(refreshToken, candidate.token)) {
-        storedToken = candidate;
-        break;
-      }
-    }
+    const storedToken = await this.findStoredToken(refreshToken);
 
     if (!storedToken) {
       throw new UnauthorizedException('Invalid refresh token');
@@ -96,6 +86,33 @@ export class AuthService {
       refreshToken: newRefreshToken,
       refreshTokenExp,
     };
+  }
+
+  async logout(refreshToken?: string) {
+    if (!refreshToken) {
+      return;
+    }
+
+    const storedToken = await this.findStoredToken(refreshToken);
+    if (storedToken) {
+      await this.refreshTokensRepository.remove(storedToken);
+    }
+  }
+
+  private async findStoredToken(refreshToken: string) {
+    const storedTokens = await this.refreshTokensRepository.find({
+      relations: {
+        user: true,
+      },
+    });
+
+    for (const candidate of storedTokens) {
+      if (await bcrypt.compare(refreshToken, candidate.token)) {
+        return candidate;
+      }
+    }
+
+    return undefined;
   }
 
   private generateTokens(user: User) {

@@ -13,6 +13,7 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { User } from '../users/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { LogoutDto } from './dto/logout.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 const REFRESH_TOKEN_COOKIE = 'refreshToken';
@@ -61,6 +62,16 @@ export class AuthController {
   @Post('mobile/refresh')
   refreshMobile(@Body(ValidationPipe) { refreshToken }: RefreshTokenDto) {
     return this.authService.refreshSession(refreshToken);
+  }
+
+  @Post('logout')
+  async logout(
+    @Cookies(REFRESH_TOKEN_COOKIE) cookieRefreshToken: string | undefined,
+    @Body(ValidationPipe) body: LogoutDto,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    await this.authService.logout(cookieRefreshToken ?? body?.refreshToken);
+    response.clearCookie(REFRESH_TOKEN_COOKIE, { path: '/auth' });
   }
 
   private setRefreshTokenCookie(response: Response, refreshToken: string) {
