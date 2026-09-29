@@ -57,6 +57,10 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## API Documentation
+
+Start the server and open [http://localhost:3000/api](http://localhost:3000/api) to view the Swagger UI. The raw OpenAPI document is available at [http://localhost:3000/api-json](http://localhost:3000/api-json).
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
