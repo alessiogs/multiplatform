@@ -47,7 +47,11 @@ export class AuthService {
     return user;
   }
 
-  async refreshSession(refreshToken: string) {
+  async refreshSession(refreshToken: string | undefined) {
+    if (!refreshToken) {
+      throw new UnauthorizedException('Refresh token is required');
+    }
+
     try {
       await this.jwtService.verifyAsync(refreshToken);
     } catch {

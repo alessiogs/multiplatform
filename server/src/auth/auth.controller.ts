@@ -3,17 +3,20 @@ import {
   Controller,
   Cookies,
   Post,
-  Req,
+  Res,
   Request,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
+import type { Response, Request as ExpressRequest } from 'express';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { Request as ExpressRequest } from 'express';
 import { User } from '../users/entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
+
+const REFRESH_TOKEN_COOKIE = 'refreshToken';
+const REFRESH_TOKEN_MAX_AGE = 7 * 24 * 60 * 60 * 1000;
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +24,20 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Request() { user }: ExpressRequest & { user: User }) {
+  async login(
+    @Request() { user }: ExpressRequest & { user: User },
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const session = await this.authService.login(user);
+    this.setRefreshTokenCookie(response, session.refreshToken);
+
+    const { refreshToken: _, ...webSession } = session;
+    return webSession;
+  }
+
+  @UseGuards(LocalAuthGuard)
+  @Post('mobile/login')
+  loginMobile(@Request() { user }: ExpressRequest & { user: User }) {
     return this.authService.login(user);
   }
 
@@ -31,7 +47,29 @@ export class AuthController {
   }
 
   @Post('refresh')
-  refreshSession(@Cookies('refreshToken') refreshToken: string) {
+  async refreshSession(
+    @Cookies(REFRESH_TOKEN_COOKIE) refreshToken: string | undefined,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const session = await this.authService.refreshSession(refreshToken);
+    this.setRefreshTokenCookie(response, session.refreshToken);
+
+    const { refreshToken: _, ...webSession } = session;
+    return webSession;
+  }
+
+  @Post('mobile/refresh')
+  refreshMobile(@Body(ValidationPipe) { refreshToken }: RefreshTokenDto) {
     return this.authService.refreshSession(refreshToken);
+  }
+
+  private setRefreshTokenCookie(response: Response, refreshToken: string) {
+    response.cookie(REFRESH_TOKEN_COOKIE, refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'lax',
+      maxAge: REFRESH_TOKEN_MAX_AGE,
+      path: '/auth',
+    });
   }
 }
