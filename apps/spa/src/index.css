@@ -1,4 +1,5 @@
 @import '@multiplatform/tokens/tokens.css';
+@import '@multiplatform/ui/ui.css';
 
 :root {
   --text: var(--token-color-text-secondary);
