@@ -10,6 +10,7 @@
       "browser": "./src/web/index.ts",
       "default": "./src/web/index.ts"
     },
+    "./auth.css": "./src/auth.css",
     "./ui.css": "./src/ui.css"
   },
   "peerDependencies": {

@@ -30,6 +30,7 @@ export function Button({
   children,
   variant = 'primary',
   size = 'md',
+  type = 'button',
   onPress,
   disabled = false,
   accessibilityLabel,
@@ -51,6 +52,7 @@ export function Button({
   return (
     <Pressable
       accessibilityLabel={accessibilityLabel}
+      accessibilityHint={type === 'submit' ? 'Submits the form' : undefined}
       accessibilityRole="button"
       accessibilityState={{ disabled }}
       disabled={disabled}

@@ -6,6 +6,7 @@ export function Button({
   children,
   variant = 'primary',
   size = 'md',
+  type = 'button',
   onPress,
   disabled = false,
   accessibilityLabel,
@@ -18,7 +19,7 @@ export function Button({
       disabled={disabled}
       onClick={onPress}
       style={style as CSSProperties}
-      type="button"
+      type={type}
     >
       {children}
     </button>

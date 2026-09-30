@@ -3,8 +3,8 @@ import "@multiplatform/ui/ui.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Multiplatform Design System",
-  description: "Shared design tokens across web and mobile apps.",
+  title: 'Sign in | Multiplatform',
+  description: 'Sign in or create your Multiplatform account.',
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

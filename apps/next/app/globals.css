@@ -1,5 +1,6 @@
 @import "@multiplatform/tokens/tokens.css";
 @import "tailwindcss";
+@import "@multiplatform/ui/auth.css";
 
 @theme inline {
   --color-background: var(--token-color-background);

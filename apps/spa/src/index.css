@@ -1,95 +1,27 @@
 @import '@multiplatform/tokens/tokens.css';
 @import '@multiplatform/ui/ui.css';
+@import '@multiplatform/ui/auth.css';
 
 :root {
-  --text: var(--token-color-text-secondary);
-  --text-h: var(--token-color-text);
-  --bg: var(--token-color-background);
-  --border: var(--token-color-border);
-  --code-bg: var(--token-color-surface);
-  --accent: var(--token-color-primary);
-  --accent-bg: var(--token-color-primary-subtle);
-  --accent-border: var(--token-color-primary-border);
-  --social-bg: var(--token-color-surface);
-  --shadow: var(--token-shadow-md);
-
-  --sans: var(--token-font-family-sans);
-  --heading: var(--token-font-family-sans);
-  --mono: var(--token-font-family-mono);
-
-  font: var(--token-font-size-body) / var(--token-line-height-body) var(--sans);
-  letter-spacing: 0.18px;
-  color: var(--text);
-  background: var(--bg);
+  color: var(--token-color-text);
+  background: var(--token-color-background);
+  font-family: var(--token-font-family-sans);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+* {
   box-sizing: border-box;
 }
 
 body {
+  min-width: 320px;
+  min-height: 100vh;
   margin: 0;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: var(--token-font-size-title);
-  letter-spacing: -1.68px;
-  margin: var(--token-space-five) 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: var(--token-font-size-heading);
-  line-height: var(--token-line-height-heading);
-  letter-spacing: -0.24px;
-  margin: 0 0 var(--token-space-two);
-  @media (max-width: 1024px) {
-    font-size: var(--token-font-size-heading-small);
-    line-height: var(--token-line-height-heading-small);
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: var(--token-radius-xs);
-  color: var(--text-h);
-}
-
-code {
-  font-size: var(--token-font-size-code);
-  line-height: 135%;
-  padding: var(--token-space-one) var(--token-space-two);
-  background: var(--code-bg);
+#root {
+  min-height: 100vh;
 }

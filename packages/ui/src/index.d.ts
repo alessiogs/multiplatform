@@ -23,6 +23,7 @@ export interface ButtonProps {
   children?: ReactNode;
   variant?: ButtonVariant;
   size?: ButtonSize;
+  type?: 'button' | 'submit';
   onPress?: () => void;
   disabled?: boolean;
   accessibilityLabel?: string;
