@@ -22,7 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         entities: [],
         synchronize: true,
         autoLoadEntities: true,
-        dropSchema: true,
+        // dropSchema: true,
       }),
     }),
     AuthModule,

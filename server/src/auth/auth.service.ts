@@ -33,8 +33,6 @@ export class AuthService {
     const { accessToken, accessTokenExp, refreshToken, refreshTokenExp } =
       this.generateTokens(user);
 
-    await this.refreshTokensRepository.delete({ user: { id: user.id } });
-
     await this.refreshTokensRepository.save({
       token: await bcrypt.hash(refreshToken, 12),
       user,
